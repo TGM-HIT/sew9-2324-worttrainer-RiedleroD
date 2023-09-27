@@ -4,3 +4,7 @@ worttrainer.astah.lock
 
 # Ignore Gradle build output directory
 build
+
+# LSP stuff
+.metadata
+.settings

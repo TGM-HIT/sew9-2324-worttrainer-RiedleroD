@@ -1,0 +1,7 @@
+{
+	"lspclient":{
+		"java": {
+            "root": "./app/"
+        }
+	}
+}
