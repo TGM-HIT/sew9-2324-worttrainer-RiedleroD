@@ -31,7 +31,7 @@ public class TrainingWindow extends JPanel {
 		this.statField = new JTextArea();
 		this.statField.setEditable(false);
 		this.add(this.statField, BorderLayout.WEST);
-		
+
 		this.setStats(null, 0, 0, 0);
 	}
 
@@ -82,19 +82,19 @@ public class TrainingWindow extends JPanel {
 
 	public void setStats(Boolean prevCorrect, int mistakes, int completed, int remaining) {
 		StringBuilder sb = new StringBuilder();
-		
+
 		sb.append("Mistakes: ");
 		sb.append(mistakes);
 		sb.append("\nCorrect: ");
 		sb.append(completed);
 		sb.append("\nRemaining: ");
 		sb.append(remaining);
-		
+
 		if (prevCorrect != null) {
 			sb.append("\nThe previous guess was ");
 			sb.append(prevCorrect);
 		}
-		
+
 		this.statField.setText(sb.toString());
 	}
 }

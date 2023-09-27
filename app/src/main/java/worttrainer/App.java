@@ -16,14 +16,14 @@ public class App {
 		frame.add(this.gui);
 		frame.pack();
 		frame.setVisible(true);
-		
-		//TODO: test behaviour
+
+		// TODO: test behaviour
 		URL url;
-		try{
+		try {
 			url = new URL("https://riedler.wien/favicon.png");
 			this.gui.onSubmitWord(e -> this.gui.setImage(url));
-		}catch(MalformedURLException e){
-			
+		} catch (MalformedURLException e) {
+
 		}
 	}
 
