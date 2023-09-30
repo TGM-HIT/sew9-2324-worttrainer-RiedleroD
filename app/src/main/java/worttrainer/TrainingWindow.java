@@ -1,40 +1,70 @@
 package worttrainer;
 
 import javax.swing.ImageIcon;
+import javax.swing.JComboBox;
+import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextArea;
 import javax.swing.SwingConstants;
 
-import java.awt.BorderLayout;
-import java.awt.Image;
-import java.awt.MediaTracker;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
 import java.awt.TextField;
 import java.awt.event.ActionListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.io.IOException;
 import java.net.URL;
+import java.util.function.Consumer;
 
-public class TrainingWindow extends JPanel {
+public class TrainingWindow extends JFrame{
 	private JLabel imageLabel;
 	private Thread imageLoadingThread;
 	private TextField textInput;
+	private JComboBox<String> datasetDropdown;
 	private JTextArea statField;
 
 	public TrainingWindow() {
-		this.setLayout(new BorderLayout());
+		super("WortTrainer");
+		
+		JPanel panel = new JPanel(new GridBagLayout());
+		GridBagConstraints c = new GridBagConstraints();
+		c.fill = GridBagConstraints.BOTH;
+		c.insets = new Insets(2,2,2,2);
 
 		this.imageLoadingThread = null;
 		this.imageLabel = new JLabel("Initializing…", SwingConstants.CENTER);
-		this.add(this.imageLabel, BorderLayout.CENTER);
 
 		this.textInput = new TextField();
-		this.add(this.textInput, BorderLayout.NORTH);
+		
+		this.datasetDropdown = new JComboBox<String>();
 
 		this.statField = new JTextArea();
 		this.statField.setEditable(false);
-		this.add(this.statField, BorderLayout.WEST);
 
 		this.setStats(null, 0, 0, 0);
+		
+		c.gridx=0;
+		c.gridy=0;
+		panel.add(this.datasetDropdown,c.clone());
+		c.gridx=1;
+		c.gridy=0;
+		panel.add(this.textInput,c.clone());
+		c.gridx=0;
+		c.gridy=1;
+		panel.add(this.statField,c.clone());
+		c.gridx=1;
+		c.gridy=1;
+		c.weightx = 1;
+		c.weighty = 1;
+		panel.add(this.imageLabel,c.clone());
+		
+		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		this.add(panel);
+		this.pack();
+		this.setVisible(true);
 
 		this.onSubmitWord(e -> textInput.setText(""));
 	}
@@ -46,6 +76,17 @@ public class TrainingWindow extends JPanel {
 	 */
 	public void onSubmitWord(ActionListener al) {
 		this.textInput.addActionListener(al);
+	}
+	
+	public void onClose(Consumer<WindowEvent> al){
+		this.addWindowListener(
+			new WindowAdapter() {
+				@Override
+				public void windowClosing(WindowEvent event) {
+					al.accept(event);
+				}
+			}
+		);
 	}
 
 	/**
@@ -63,8 +104,6 @@ public class TrainingWindow extends JPanel {
 		this.imageLabel.setIcon(null);
 		this.imageLabel.setText("Loading…");
 
-		// TODO: image cache
-
 		// creating a new thread to load, scale and display the image
 		this.imageLoadingThread = new Thread() {
 			public void run() {
@@ -74,13 +113,7 @@ public class TrainingWindow extends JPanel {
 				} catch (IOException e) {
 					throw new RuntimeException(e);
 				}
-				// TODO: scale to what the container needs
-				// int width = (int)(icon.getIconWidth() * (250.0 / icon.getIconHeight())); //
-				// (250 / height) → scaling factor
-				// image = image.getScaledInstance(width, 250, Image.SCALE_SMOOTH); // skalieren
-				// auf gewünschte Größe
-				// ImageIcon ii = new ImageIcon(image);
-				imageLabel.setIcon(icon); // anzeigen in einem JLabel
+				imageLabel.setIcon(icon);
 				imageLabel.setText("");
 			}
 		};

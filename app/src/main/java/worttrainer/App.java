@@ -1,11 +1,7 @@
 package worttrainer;
 
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
 import java.io.IOException;
 import java.util.Map;
-
-import javax.swing.JFrame;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 
@@ -28,26 +24,16 @@ public class App {
 		}
 
 		this.gui = new TrainingWindow();
-
-		JFrame frame = new JFrame("WortTrainer");
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		frame.add(this.gui);
-		frame.pack();
-		frame.setVisible(true);
-
 		this.updateGUI(null);
 
-		this.gui.onSubmitWord(e -> {
-			this.updateGUI(tm.guessWord(e.getActionCommand()));
+		this.gui.onSubmitWord(event -> {
+			this.updateGUI(tm.guessWord(event.getActionCommand()));
 		});
-		frame.addWindowListener(new WindowAdapter() {
-			@Override
-			public void windowClosing(WindowEvent event) {
-				try {
-					ConfigMaster.setCache("session", tm);
-				} catch (IOException e) {
-					throw new RuntimeException(e);
-				}
+		this.gui.onClose(event -> {
+			try {
+				ConfigMaster.setCache("session", tm);
+			} catch (IOException e) {
+				throw new RuntimeException(e);
 			}
 		});
 	}
