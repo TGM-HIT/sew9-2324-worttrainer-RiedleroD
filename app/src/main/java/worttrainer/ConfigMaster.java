@@ -43,15 +43,17 @@ public class ConfigMaster {
 	}
 
 	private static <T> Map<String, T> getSettings() throws IOException {
-		Map<String, T> map;
-		if(!settingsFile.exists()){
+		if (!settingsFile.exists()) {
+			// copy settings from resources to config folder
 			settingsFile.getParentFile().mkdirs();
-			map = new HashMap<String, T>();
-		}else{
-			map = mapper.readerFor(new TypeReference<Map<String, T>>() {})
-				.readValue(settingsFile);
+			URL defaultSettingsURL = Thread.currentThread().getContextClassLoader().getResource("config.json");
+			ReadableByteChannel rbc = Channels.newChannel(defaultSettingsURL.openStream());
+			FileOutputStream fos = new FileOutputStream(settingsFile);
+			fos.getChannel().transferFrom(rbc, 0, 1048576);// max 1MiB
+			fos.flush();
+			fos.close();
 		}
-		return map;
+		return mapper.readerFor(new TypeReference<Map<String, T>>() {}).readValue(settingsFile);
 	}
 
 	public static <T> void setCache(String name, T obj) throws IOException {

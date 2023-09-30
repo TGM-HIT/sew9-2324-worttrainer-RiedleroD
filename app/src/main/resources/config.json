@@ -1,0 +1,22 @@
+{
+  "datasets" : {
+    "Städtepanorama" : {
+      "url" : "https://de.wikipedia.org/wiki/Liste_der_gr%C3%B6%C3%9Ften_St%C3%A4dte_Europas",
+      "cssSelector" : ".wikitable",
+      "imgCol" : ":eq(6) img",
+      "nameCol" : ":eq(1) a"
+    },
+    "Länderflaggen" : {
+      "url" : "https://de.wikipedia.org/wiki/Liste_der_Staaten_Europas",
+      "cssSelector" : ".wikitable",
+      "imgCol" : ":eq(0) .noviewer img",
+      "nameCol" : ":eq(0) .noviewer+a"
+    },
+    "Paarhufer Österreichs" : {
+      "url" : "https://de.wikipedia.org/wiki/Liste_der_S%C3%A4ugetiere_%C3%96sterreichs",
+      "cssSelector" : "h2:has(a[href=\"/wiki/Paarhufer\"])+.wikitable",
+      "imgCol" : ":eq(0) img",
+      "nameCol" : ":eq(1) a:first-of-type"
+    }
+  }
+}
