@@ -1,15 +1,26 @@
 package worttrainer;
 
-import java.net.MalformedURLException;
-import java.net.URL;
+import java.io.IOException;
+import java.util.Map;
 
 import javax.swing.JFrame;
+
+import com.fasterxml.jackson.core.type.TypeReference;
 
 public class App {
 	private TrainingWindow gui;
 	private TrainingMaster tm;
 
 	private App() {
+		try{
+			Map<String,WebReader> wrm = ConfigMaster.getSetting("datasets",new TypeReference<Map<String,WebReader>>(){});
+			// dropdown choice
+			WebReader wr = wrm.get("Länderflaggen");
+			this.tm = new TrainingMaster(wr.parseSite());
+		}catch(IOException e){
+			throw new RuntimeException(e);
+		}
+
 		this.gui = new TrainingWindow();
 
 		JFrame frame = new JFrame("WortTrainer");
@@ -17,17 +28,6 @@ public class App {
 		frame.add(this.gui);
 		frame.pack();
 		frame.setVisible(true);
-
-		// TODO: select different lists
-		try {
-			this.tm = new TrainingMaster(WebReader.parseSite(
-					new URL("https://de.wikipedia.org/wiki/Liste_der_Staaten_Europas"),
-					".wikitable",
-					":eq(0) .noviewer img",
-					":eq(0) .noviewer+a"));
-		} catch (MalformedURLException e) {
-			throw new RuntimeException(e);
-		}
 
 		this.updateGUI(null);
 

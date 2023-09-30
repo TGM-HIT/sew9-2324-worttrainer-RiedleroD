@@ -22,6 +22,12 @@ dependencies {
 
     // for html parsing
     implementation 'org.jsoup:jsoup:1.16.1'
+
+    // for getting the OS config dir, cache dir, etc.
+    // see https://github.com/dirs-dev/directories-jvm
+    implementation 'dev.dirs:directories:26'
+    // for json handling
+    implementation 'com.fasterxml.jackson.core:jackson-databind:2.15.2'
 }
 
 // Apply a specific Java toolchain to ease working on different environments.

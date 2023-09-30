@@ -1,14 +1,19 @@
 package worttrainer;
 
-import java.net.MalformedURLException;
+import java.io.Serializable;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Random;
 
-public class TrainingMaster {
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
+public class TrainingMaster implements Serializable {
 	private ArrayList<TrainingEntry> entries;
 	private int currentEntry;
 	private int completedEntries;
+	@JsonIgnore
 	private Random rand;
 
 	public TrainingMaster(ArrayList<TrainingEntry> entries) {
@@ -17,6 +22,17 @@ public class TrainingMaster {
 		this.completedEntries = 0;
 
 		this.pickRandomEntry();
+	}
+
+	@JsonCreator
+	public TrainingMaster(
+			@JsonProperty("entries") ArrayList<TrainingEntry> entries,
+			@JsonProperty("currentEntry") int currentEntry,
+			@JsonProperty("completedEntries") int completedEntries) {
+		this.entries = entries;
+		this.rand = new Random();
+		this.completedEntries = completedEntries;
+		this.currentEntry = currentEntry;
 	}
 
 	/**
@@ -33,14 +49,11 @@ public class TrainingMaster {
 			this.entries.remove(currentEntry);
 			this.completedEntries++;
 		}
-		
+
 		this.pickRandomEntry();
 
 		return correct;
 	}
-
-	// TODO: fromState
-	// TODO: saveState
 
 	public URL getImage() {
 		return entries.get(currentEntry).getImage();
