@@ -28,39 +28,39 @@ public class TrainingWindow extends JFrame{
 
 	public TrainingWindow() {
 		super("WortTrainer");
-		
+
 		JPanel panel = new JPanel(new GridBagLayout());
 		GridBagConstraints c = new GridBagConstraints();
 		c.fill = GridBagConstraints.BOTH;
-		c.insets = new Insets(2,2,2,2);
+		c.insets = new Insets(2, 2, 2, 2);
 
 		this.imageLoadingThread = null;
 		this.imageLabel = new JLabel("Initializing…", SwingConstants.CENTER);
 
 		this.textInput = new TextField();
-		
+
 		this.datasetDropdown = new JComboBox<String>();
 
 		this.statField = new JTextArea();
 		this.statField.setEditable(false);
 
 		this.setStats(null, 0, 0, 0);
-		
-		c.gridx=0;
-		c.gridy=0;
-		panel.add(this.datasetDropdown,c.clone());
-		c.gridx=1;
-		c.gridy=0;
-		panel.add(this.textInput,c.clone());
-		c.gridx=0;
-		c.gridy=1;
-		panel.add(this.statField,c.clone());
-		c.gridx=1;
-		c.gridy=1;
+
+		c.gridx = 0;
+		c.gridy = 0;
+		panel.add(this.datasetDropdown, c.clone());
+		c.gridx = 1;
+		c.gridy = 0;
+		panel.add(this.textInput, c.clone());
+		c.gridx = 0;
+		c.gridy = 1;
+		panel.add(this.statField, c.clone());
+		c.gridx = 1;
+		c.gridy = 1;
 		c.weightx = 1;
 		c.weighty = 1;
-		panel.add(this.imageLabel,c.clone());
-		
+		panel.add(this.imageLabel, c.clone());
+
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		this.add(panel);
 		this.pack();
@@ -78,15 +78,19 @@ public class TrainingWindow extends JFrame{
 		this.textInput.addActionListener(al);
 	}
 	
-	public void onClose(Consumer<WindowEvent> al){
+	/**
+	 * Adds a listener to the window closing
+	 *
+	 * @param cb the callback
+	 */
+	public void onClose(Consumer<WindowEvent> cb) {
 		this.addWindowListener(
 			new WindowAdapter() {
 				@Override
 				public void windowClosing(WindowEvent event) {
-					al.accept(event);
+					cb.accept(event);
 				}
-			}
-		);
+			});
 	}
 
 	/**
