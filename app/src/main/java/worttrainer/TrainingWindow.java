@@ -8,6 +8,7 @@ import javax.swing.SwingConstants;
 
 import java.awt.BorderLayout;
 import java.awt.Image;
+import java.awt.MediaTracker;
 import java.awt.TextField;
 import java.awt.event.ActionListener;
 import java.net.URL;
@@ -33,6 +34,8 @@ public class TrainingWindow extends JPanel {
 		this.add(this.statField, BorderLayout.WEST);
 
 		this.setStats(null, 0, 0, 0);
+
+		this.onSubmitWord(e -> textInput.setText(""));
 	}
 
 	/**
@@ -71,15 +74,31 @@ public class TrainingWindow extends JPanel {
 				// (250 / height) → scaling factor
 				// image = image.getScaledInstance(width, 250, Image.SCALE_SMOOTH); // skalieren
 				// auf gewünschte Größe
-				ImageIcon ii = new ImageIcon(image);
-				imageLabel.setIcon(ii); // anzeigen in einem JLabel
-				imageLabel.setText(null);
+				// ImageIcon ii = new ImageIcon(image);
+				MediaTracker tracker = new MediaTracker(imageLabel);
+				tracker.addImage(image, 0);
+				try {
+					tracker.waitForAll();
+				} catch (InterruptedException e) {
+					throw new RuntimeException(e);
+				}
+				imageLabel.setIcon(icon); // anzeigen in einem JLabel
+				imageLabel.setText("");
 			}
 		};
 
 		this.imageLoadingThread.start();
 	}
 
+	/**
+	 * Sets the textbox containing the stats
+	 * 
+	 * @param prevCorrect whether the previous guess was correct (null to hide the
+	 *                    line)
+	 * @param mistakes    how many mistakes were made thus far
+	 * @param completed   how many words have been correctly entered
+	 * @param remaining   how many entries remain to be guessed on
+	 */
 	public void setStats(Boolean prevCorrect, int mistakes, int completed, int remaining) {
 		StringBuilder sb = new StringBuilder();
 
