@@ -41,39 +41,25 @@ public class WebReader implements Serializable {
 
 			// extracting table, and cells containing the images and names
 			Element table = doc.select(cssSelector).first();
-			Elements imgElements = table.children().select("tbody>tr>td" + imgCol);
-			Elements nameElements = table.children().select("tbody>tr>td" + nameCol);
+			Elements rows = table.children().select("tbody>tr");
 
-			// checking if equal amounts of images and names were found
-			if (imgElements.size() != nameElements.size()) {
-				System.err.println(imgElements.size() + " != " + nameElements.size());
-				System.err.print("\033[2m");
-				int i = 0;
-				boolean cont;
-				do {
-					cont = false;
-					if (i < imgElements.size()) {
-						System.err.println(imgElements.get(i));
-						cont = true;
-					}
-					if (i < nameElements.size()) {
-						System.err.println(nameElements.get(i));
-						cont = true;
-					}
+			ArrayList<TrainingEntry> result = new ArrayList<TrainingEntry>();
 
-					i++;
-				} while (cont);
-				System.err.print("\033[0m");
-				throw new RuntimeException("Found different amounts of image cells and name cells");
-			}
-
-			ArrayList<TrainingEntry> result = new ArrayList<TrainingEntry>(imgElements.size());
-
-			// iterating over cells & making TrainingEntries from them
-			for (int i = 0; i < imgElements.size(); i++) {
+			// iterating over rows & making TrainingEntries from them
+			for (int i = 0; i < rows.size(); i++) {
+				//find image and name; only make entry if exactly one each exists
+				Elements imgElements = rows.get(i).select(">td" + imgCol);
+				Elements nameElements = rows.get(i).select(">td" + nameCol);
+				if(imgElements.size()>1)
+					System.err.println("found too many images in row "+i);
+				if(nameElements.size()>1)
+					System.err.println("found too many names in row "+i);
+				if(imgElements.size()!=1 || nameElements.size()!=1)
+					continue;
+				
 				// getting src and name
-				String imgSrc = imgElements.get(i).attr("src");
-				String name = nameElements.get(i).text();
+				String imgSrc = imgElements.first().attr("src");
+				String name = nameElements.first().text();
 
 				// lots of url parsing
 				String absImgSrc;
