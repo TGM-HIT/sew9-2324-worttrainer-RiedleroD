@@ -32,6 +32,12 @@ public class WebReader implements Serializable {
 		this.nameCol = nameCol;
 	}
 
+	/**
+	 * Parses the website
+	 * in hindsight, I should've split the "get website" and "parse website" parts into two.
+	 * oh well.
+	 * @return a list of training entries that correspond to the website and parsing options chosen
+	 */
 	public ArrayList<TrainingEntry> parseSite() {
 		try {
 			// getting document

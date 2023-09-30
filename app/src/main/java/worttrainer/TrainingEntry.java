@@ -21,20 +21,41 @@ public class TrainingEntry implements Serializable {
 		this.tries = tries;
 	}
 
+	/**
+	 * increments guesses, and checks for equality
+	 * 
+	 * @param word the word to guess
+	 * @return whether the guess was correct
+	 */
 	public boolean guessWord(String word) {
 		this.tries++;
 		System.out.println(word + " vs. " + this.word);
 		return word.toLowerCase().equals(this.word);
 	}
 
+	/**
+	 * returns the image
+	 * 
+	 * @return the image
+	 */
 	public URL getImage() {
 		return this.image;
 	}
 
+	/**
+	 * returns the word
+	 * 
+	 * @return the word
+	 */
 	public String getWord() {
 		return this.word;
 	}
 
+	/**
+	 * returns the number of guesses
+	 * 
+	 * @return the number of guesses
+	 */
 	public int getTries() {
 		return this.tries;
 	}

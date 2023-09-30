@@ -65,6 +65,11 @@ public class TrainingMaster implements Serializable {
 		return correct;
 	}
 
+	/**
+	 * returns the image of the currently selected word
+	 * 
+	 * @return the url to the image
+	 */
 	@JsonIgnore
 	public URL getImage() {
 		if(currentEntry==-1)
@@ -72,15 +77,24 @@ public class TrainingMaster implements Serializable {
 		return entries.get(currentEntry).getImage();
 	}
 
+	/**
+	 * @return the amount of completed entries
+	 */
 	public int getCompletedEntries() {
 		return this.completedEntries;
 	}
 
+	/**
+	 * @return the amount of remaining entries
+	 */
 	@JsonIgnore
 	public int getRemainingEntries() {
 		return this.entries.size();
 	}
 
+	/**
+	 * @return the amount of incorrect guesses
+	 */
 	@JsonIgnore
 	public int getIncorrectEntries() {
 		int c = 0;
@@ -90,18 +104,30 @@ public class TrainingMaster implements Serializable {
 		return c;
 	}
 
+	/**
+	 * @return all remaining entries
+	 */
 	public ArrayList<TrainingEntry> getEntries(){
 		return this.entries;
 	}
 
+	/**
+	 * @return the currently selected entry's index
+	 */
 	public int getCurrentEntry() {
 		return this.currentEntry;
 	}
-	
+
+	/**
+	 * @return the name of the current dataset
+	 */
 	public String getName() {
 		return this.name;
 	}
-	
+
+	/**
+	 * picks a random entry. internal function
+	 */
 	private void pickRandomEntry() {
 		if (this.entries.size() > 0) {
 			this.currentEntry = this.rand.nextInt(this.entries.size());
