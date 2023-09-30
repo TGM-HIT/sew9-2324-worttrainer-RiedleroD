@@ -1,10 +1,19 @@
 package worttrainer;
 
+import java.awt.Image;
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.net.URL;
+import java.nio.ByteBuffer;
+import java.nio.channels.Channels;
+import java.nio.channels.ReadableByteChannel;
 import java.nio.file.Paths;
+import java.util.Base64;
 import java.util.HashMap;
 import java.util.Map;
+
+import javax.swing.ImageIcon;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -50,7 +59,7 @@ public class ConfigMaster {
 		f.getParentFile().mkdirs();
 		mapper.writer().writeValue(f, obj);
 	}
-
+	
 	public static <T> T getCache(String name) {
 		return getCache(name, new TypeReference<T>(){});
 	}
@@ -62,5 +71,24 @@ public class ConfigMaster {
 		} catch (IOException e) {
 			return null;
 		}
+	}
+	
+	public static ImageIcon cachedImage(URL url) throws IOException {
+		byte[] hash = ByteBuffer.allocate(4).putInt(url.toString().hashCode()).array();
+		String hashb64 = Base64.getEncoder().encodeToString(hash)
+				.replace('/', '_')
+				.replace('+', '-');
+		File f = Paths.get(projDirs.cacheDir, "imgs", hashb64+".bin").toFile();
+		
+		if(!f.exists()){
+			f.getParentFile().mkdirs();
+			ReadableByteChannel rbc = Channels.newChannel(url.openStream());
+			FileOutputStream fos = new FileOutputStream(f);
+			fos.getChannel().transferFrom(rbc,0,1048576);//max 1MiB
+			fos.flush();
+			fos.close();
+		}
+		
+		return new ImageIcon(f.toURI().toURL());
 	}
 }

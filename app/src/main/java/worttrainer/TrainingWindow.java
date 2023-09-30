@@ -11,6 +11,7 @@ import java.awt.Image;
 import java.awt.MediaTracker;
 import java.awt.TextField;
 import java.awt.event.ActionListener;
+import java.io.IOException;
 import java.net.URL;
 
 public class TrainingWindow extends JPanel {
@@ -67,21 +68,18 @@ public class TrainingWindow extends JPanel {
 		// creating a new thread to load, scale and display the image
 		this.imageLoadingThread = new Thread() {
 			public void run() {
-				ImageIcon icon = new ImageIcon(url);
-				Image image = icon.getImage(); // transform to image
+				ImageIcon icon;
+				try {
+					icon = ConfigMaster.cachedImage(url);
+				} catch (IOException e) {
+					throw new RuntimeException(e);
+				}
 				// TODO: scale to what the container needs
 				// int width = (int)(icon.getIconWidth() * (250.0 / icon.getIconHeight())); //
 				// (250 / height) → scaling factor
 				// image = image.getScaledInstance(width, 250, Image.SCALE_SMOOTH); // skalieren
 				// auf gewünschte Größe
 				// ImageIcon ii = new ImageIcon(image);
-				MediaTracker tracker = new MediaTracker(imageLabel);
-				tracker.addImage(image, 0);
-				try {
-					tracker.waitForAll();
-				} catch (InterruptedException e) {
-					throw new RuntimeException(e);
-				}
 				imageLabel.setIcon(icon); // anzeigen in einem JLabel
 				imageLabel.setText("");
 			}
