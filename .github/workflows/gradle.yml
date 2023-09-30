@@ -31,4 +31,6 @@ jobs:
     - name: Set up Gradle
       uses: gradle/gradle-build-action@v2
     - name: Build with Gradle
-      run: ./gradlew build
+      run: gradle build
+    - name: Test with Gradle
+      run: gradle test
