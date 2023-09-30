@@ -26,7 +26,7 @@ public class TrainingWindow extends JFrame{
 	private JComboBox<String> datasetDropdown;
 	private JTextArea statField;
 
-	public TrainingWindow() {
+	public TrainingWindow(String[] datasets) {
 		super("WortTrainer");
 
 		JPanel panel = new JPanel(new GridBagLayout());
@@ -35,11 +35,11 @@ public class TrainingWindow extends JFrame{
 		c.insets = new Insets(2, 2, 2, 2);
 
 		this.imageLoadingThread = null;
-		this.imageLabel = new JLabel("Initializing…", SwingConstants.CENTER);
+		this.imageLabel = new JLabel("", SwingConstants.CENTER);
 
 		this.textInput = new TextField();
 
-		this.datasetDropdown = new JComboBox<String>();
+		this.datasetDropdown = new JComboBox<String>(datasets);
 
 		this.statField = new JTextArea();
 		this.statField.setEditable(false);
@@ -92,6 +92,14 @@ public class TrainingWindow extends JFrame{
 				}
 			});
 	}
+	
+	/**
+	 * Adds a listener for when a dataset is selected
+	 * @param al the callback
+	 */
+	public void onSelectDataset(ActionListener al){
+		this.datasetDropdown.addActionListener(al);
+	}
 
 	/**
 	 * Sets the center image to the source of the URL
@@ -106,6 +114,7 @@ public class TrainingWindow extends JFrame{
 	 */
 	public void setImage(URL url) {
 		this.imageLabel.setIcon(null);
+		if(url==null) return;
 		this.imageLabel.setText("Loading…");
 
 		// creating a new thread to load, scale and display the image
@@ -150,5 +159,12 @@ public class TrainingWindow extends JFrame{
 		}
 
 		this.statField.setText(sb.toString());
+	}
+	
+	/**
+	 * Replaces the stats field with a helper message
+	 */
+	public void clearStats(){
+		this.statField.setText("Select a Category ↑");
 	}
 }

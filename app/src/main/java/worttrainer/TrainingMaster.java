@@ -10,17 +10,25 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class TrainingMaster implements Serializable {
+	private String name;
 	private ArrayList<TrainingEntry> entries;
 	private int currentEntry;
 	private int completedEntries;
 	@JsonIgnore
 	private Random rand;
 
-	public TrainingMaster(ArrayList<TrainingEntry> entries) {
-		this.entries = entries;
+	public TrainingMaster(ArrayList<TrainingEntry> entries, String name) {
 		this.rand = new Random();
 		this.completedEntries = 0;
-
+		this.name = name;
+		
+		if(this.name.equals("")){
+			//special case - empty
+			this.entries = new ArrayList<TrainingEntry>();
+		}else{
+			this.entries = entries;
+		}
+		
 		this.pickRandomEntry();
 	}
 
@@ -28,11 +36,13 @@ public class TrainingMaster implements Serializable {
 	public TrainingMaster(
 			@JsonProperty("entries") ArrayList<TrainingEntry> entries,
 			@JsonProperty("currentEntry") int currentEntry,
-			@JsonProperty("completedEntries") int completedEntries) {
+			@JsonProperty("completedEntries") int completedEntries,
+			@JsonProperty("name") String name) {
 		this.entries = entries;
 		this.rand = new Random();
 		this.completedEntries = completedEntries;
 		this.currentEntry = currentEntry;
+		this.name = name;
 	}
 
 	/**
@@ -57,6 +67,8 @@ public class TrainingMaster implements Serializable {
 
 	@JsonIgnore
 	public URL getImage() {
+		if(currentEntry==-1)
+			return null;
 		return entries.get(currentEntry).getImage();
 	}
 
@@ -84,6 +96,10 @@ public class TrainingMaster implements Serializable {
 
 	public int getCurrentEntry() {
 		return this.currentEntry;
+	}
+	
+	public String getName() {
+		return this.name;
 	}
 	
 	private void pickRandomEntry() {

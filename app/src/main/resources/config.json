@@ -1,5 +1,11 @@
 {
   "datasets" : {
+    "" :{
+      "url":"file:///",
+      "cssSelector" : "",
+      "imgCol" : "",
+      "nameCol" : ""
+    },
     "Städtepanorama" : {
       "url" : "https://de.wikipedia.org/wiki/Liste_der_gr%C3%B6%C3%9Ften_St%C3%A4dte_Europas",
       "cssSelector" : ".wikitable",
