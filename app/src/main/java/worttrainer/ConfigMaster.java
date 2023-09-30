@@ -17,7 +17,6 @@ public class ConfigMaster {
 	private final static ProjectDirectories projDirs =
 		ProjectDirectories.from("wien", "riedler", "worttrainer");
 	private final static File settingsFile = Paths.get(projDirs.configDir, "config.json").toFile();
-	private final static File cacheFile = Paths.get(projDirs.cacheDir, "cache.json").toFile();
 
 	public static <T> void setSetting(String name, T obj) throws IOException {
 		Map<String, T> map = getSettings();
@@ -44,5 +43,24 @@ public class ConfigMaster {
 				.readValue(settingsFile);
 		}
 		return map;
+	}
+
+	public static <T> void setCache(String name, T obj) throws IOException {
+		File f = Paths.get(projDirs.cacheDir, name + ".json").toFile();
+		f.getParentFile().mkdirs();
+		mapper.writer().writeValue(f, obj);
+	}
+
+	public static <T> T getCache(String name) {
+		return getCache(name, new TypeReference<T>(){});
+	}
+
+	public static <T> T getCache(String name, TypeReference<T> type) {
+		File f = Paths.get(projDirs.cacheDir, name + ".json").toFile();
+		try {
+			return mapper.readerFor(type).readValue(f);
+		} catch (IOException e) {
+			return null;
+		}
 	}
 }

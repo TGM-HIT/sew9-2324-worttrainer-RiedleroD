@@ -55,6 +55,7 @@ public class TrainingMaster implements Serializable {
 		return correct;
 	}
 
+	@JsonIgnore
 	public URL getImage() {
 		return entries.get(currentEntry).getImage();
 	}
@@ -63,10 +64,12 @@ public class TrainingMaster implements Serializable {
 		return this.completedEntries;
 	}
 
+	@JsonIgnore
 	public int getRemainingEntries() {
 		return this.entries.size();
 	}
 
+	@JsonIgnore
 	public int getIncorrectEntries() {
 		int c = 0;
 		for (TrainingEntry entry : this.entries) {
@@ -75,6 +78,14 @@ public class TrainingMaster implements Serializable {
 		return c;
 	}
 
+	public ArrayList<TrainingEntry> getEntries(){
+		return this.entries;
+	}
+
+	public int getCurrentEntry() {
+		return this.currentEntry;
+	}
+	
 	private void pickRandomEntry() {
 		if (this.entries.size() > 0) {
 			this.currentEntry = this.rand.nextInt(this.entries.size());
