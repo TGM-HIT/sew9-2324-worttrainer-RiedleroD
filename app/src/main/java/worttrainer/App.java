@@ -1,9 +1,12 @@
 package worttrainer;
 
 import java.io.IOException;
+import java.io.PrintWriter;
+import java.io.StringWriter;
 import java.util.Map;
 
 import javax.swing.JComboBox;
+import javax.swing.JOptionPane;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 
@@ -74,6 +77,17 @@ public class App {
 	}
 
 	public static void main(String[] args) {
+		Thread.setDefaultUncaughtExceptionHandler(
+				(Thread t, Throwable e) -> {
+					StringWriter sw = new StringWriter();
+					e.printStackTrace(new PrintWriter(sw));
+					JOptionPane.showMessageDialog(
+							null,
+							sw.toString(),
+							e.getClass().getCanonicalName() + ": " + e.getMessage(),
+							JOptionPane.ERROR_MESSAGE);
+				});
+
 		new App();
 	}
 }
